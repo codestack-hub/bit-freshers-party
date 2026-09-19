@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard — BIT Freshers Party 2026</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0f0f1a;
+            color: #e0e0e0;
+            min-height: 100vh;
+            padding: 2rem 1rem;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+        .header h1 {
+            font-size: 2rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #a78bfa, #f472b6, #fb923c);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+        .header p {
+            color: #9ca3af;
+            font-size: 0.95rem;
+        }
+        .header p strong { color: #e0e0e0; }
+        .stats-bar {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+        .stat-card {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 16px;
+            padding: 1.25rem 2rem;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            min-width: 140px;
+        }
+        .stat-card .number {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #a78bfa, #f472b6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .stat-card .number.green {
+            background: linear-gradient(135deg, #34d399, #6ee7b7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .stat-card .label {
+            font-size: 0.85rem;
+            color: #9ca3af;
+            margin-top: 0.25rem;
+        }
+        .table-wrapper {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 16px;
+            overflow-x: auto;
+            backdrop-filter: blur(10px);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+        }
+        thead th {
+            background: rgba(167, 139, 250, 0.15);
+            padding: 0.9rem 1rem;
+            text-align: left;
+            font-weight: 600;
+            color: #c4b5fd;
+            white-space: nowrap;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+        }
+        tbody td {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid rgba(255,255,255,0.04);
+            vertical-align: middle;
+        }
+        tbody tr:hover {
+            background: rgba(167, 139, 250, 0.06);
+        }
+        tbody tr:last-child td {
+            border-bottom: none;
+        }
+        .code-cell {
+            font-family: 'Courier New', monospace;
+            background: rgba(251, 146, 60, 0.1);
+            color: #fb923c;
+            padding: 0.25rem 0.5rem;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 0.8rem;
+            letter-spacing: 0.5px;
+        }
+        .entry-cell {
+            font-family: 'Courier New', monospace;
+            background: rgba(52, 211, 153, 0.1);
+            color: #34d399;
+            padding: 0.25rem 0.5rem;
+            border-radius: 6px;
+            font-weight: 700;
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+        }
+        .badge {
+            display: inline-block;
+            padding: 0.2rem 0.6rem;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 600;
+        }
+        .badge.yr1 {
+            background: rgba(96, 165, 250, 0.15);
+            color: #60a5fa;
+        }
+        .badge.yr2 {
+            background: rgba(167, 139, 250, 0.15);
+            color: #c4b5fd;
+        }
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: #6b7280;
+        }
+        .empty-state .icon { font-size: 3rem; margin-bottom: 1rem; }
+        .actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+        .btn {
+            padding: 0.6rem 1.25rem;
+            border-radius: 10px;
+            border: 1px solid rgba(255,255,255,0.1);
+            background: rgba(255,255,255,0.05);
+            color: #c4b5fd;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn:hover {
+            background: rgba(167, 139, 250, 0.15);
+            border-color: rgba(167, 139, 250, 0.3);
+        }
+        /* Search */
+        .search-bar {
+            margin-bottom: 1.25rem;
+        }
+        .search-bar input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 12px;
+            color: #e0e0e0;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        .search-bar input:focus {
+            border-color: rgba(167, 139, 250, 0.4);
+        }
+        .search-bar input::placeholder { color: rgba(255,255,255,0.2); }
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: #1e1e2e;
+            border: 1px solid rgba(167, 139, 250, 0.3);
+            color: #e0e0e0;
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            opacity: 0;
+            transition: all 0.4s ease;
+            z-index: 100;
+        }
+        .toast.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+        .reveal-btn {
+            background: none;
+            border: 1px solid rgba(251,146,60,0.25);
+            color: #fb923c;
+            font-size: 0.7rem;
+            font-weight: 600;
+            padding: 0.2rem 0.5rem;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-left: 0.4rem;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.2s;
+            vertical-align: middle;
+        }
+        .reveal-btn:hover {
+            background: rgba(251,146,60,0.1);
+        }
+        .masked-code {
+            font-family: 'Courier New', monospace;
+            font-size: 0.8rem;
+            color: #6b7280;
+            letter-spacing: 0.5px;
+        }
+        .revealed-code {
+            display: none;
+        }
+        @media (max-width: 768px) {
+            .header h1 { font-size: 1.5rem; }
+            .stat-card { padding: 1rem 1.5rem; }
+            .stat-card .number { font-size: 2rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔐 Admin Dashboard</h1>
+            <p>BIT Freshers Party 2026 × District App — <strong>Just Bangalore, Brigade Road</strong> — ₹999 Entry</p>
+        </div>
+
+        <div class="stats-bar">
+            <div class="stat-card">
+                <div class="number">{{ registrations | length }}</div>
+                <div class="label">Registered</div>
+            </div>
+            <div class="stat-card">
+                <div class="number green">{{ seats_left }}</div>
+                <div class="label">Seats Left / {{ seat_limit }}</div>
+            </div>
+        </div>
+
+        {% if registrations %}
+        <div class="search-bar">
+            <input type="text" id="searchInput" placeholder="🔍  Search by name, USN, phone, branch, entry code…" oninput="filterTable()">
+        </div>
+        <div class="actions">
+            <button class="btn" id="toggleAllBtn" onclick="toggleAllCodes()">👁 Reveal All Codes</button>
+            <button class="btn" onclick="copyTable()">📋 Copy Table</button>
+            <button class="btn" onclick="downloadCSV()">📥 Export CSV</button>
+        </div>
+        <div class="table-wrapper">
+            <table id="regTable">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Full Name</th>
+                        <th>USN</th>
+                        <th>Phone</th>
+                        <th>Branch</th>
+                        <th>Year</th>
+                        <th>District Gift Card</th>
+                        <th>Entry Code</th>
+                        <th>Registered At</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody">
+                    {% for r in registrations %}
+                    <tr>
+                        <td>{{ loop.index }}</td>
+                        <td>{{ r.full_name }}</td>
+                        <td>{{ r.usn }}</td>
+                        <td>{{ r.phone }}</td>
+                        <td>{{ r.branch }}</td>
+                        <td>
+                            <span class="badge {% if r.year == '1st Year' %}yr1{% else %}yr2{% endif %}">
+                                {{ r.year }}
+                            </span>
+                        </td>
+                        <td>
+                            <span class="masked-code" id="masked-{{ loop.index }}">{{ r.get_masked_gift_card() }}</span>
+                            <span class="code-cell revealed-code" id="revealed-{{ loop.index }}">{{ r.get_gift_card_code() }}</span>
+                            <button class="reveal-btn" onclick="toggleCode({{ loop.index }})" id="btn-{{ loop.index }}">show</button>
+                        </td>
+                        <td><span class="entry-cell">{{ r.entry_code }}</span></td>
+                        <td>{{ r.created_at.strftime('%d %b %Y, %I:%M %p') if r.created_at else '—' }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <div class="icon">📭</div>
+            <p>No registrations yet. Share the registration link with juniors!</p>
+        </div>
+        {% endif %}
+    </div>
+
+    <div class="toast" id="toast">Copied to clipboard!</div>
+
+    <script>
+        function filterTable() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            const rows = document.querySelectorAll('#tableBody tr');
+            rows.forEach(row => {
+                const text = row.textContent.toLowerCase();
+                row.style.display = text.includes(query) ? '' : 'none';
+            });
+        }
+
+        function copyTable() {
+            const table = document.getElementById('regTable');
+            let text = '';
+            for (const row of table.rows) {
+                if (row.style.display === 'none') continue;
+                const cells = Array.from(row.cells).map(c => c.innerText);
+                text += cells.join('\t') + '\n';
+            }
+            navigator.clipboard.writeText(text).then(() => showToast('Copied to clipboard!'));
+        }
+
+        function downloadCSV() {
+            const table = document.getElementById('regTable');
+            let csv = '';
+            for (const row of table.rows) {
+                const cells = Array.from(row.cells).map(c => '"' + c.innerText.replace(/"/g, '""') + '"');
+                csv += cells.join(',') + '\n';
+            }
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'bit_freshers_registrations.csv';
+            a.click();
+            URL.revokeObjectURL(url);
+            showToast('CSV downloaded!');
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            toast.textContent = msg;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 2000);
+        }
+
+        function toggleCode(idx) {
+            const masked = document.getElementById('masked-' + idx);
+            const revealed = document.getElementById('revealed-' + idx);
+            const btn = document.getElementById('btn-' + idx);
+            if (revealed.style.display === 'inline') {
+                revealed.style.display = 'none';
+                masked.style.display = 'inline';
+                btn.textContent = 'show';
+            } else {
+                revealed.style.display = 'inline';
+                masked.style.display = 'none';
+                btn.textContent = 'hide';
+            }
+        }
+
+        let allRevealed = false;
+        function toggleAllCodes() {
+            allRevealed = !allRevealed;
+            const maskedEls = document.querySelectorAll('.masked-code');
+            const revealedEls = document.querySelectorAll('.revealed-code');
+            const btns = document.querySelectorAll('.reveal-btn');
+            maskedEls.forEach(el => el.style.display = allRevealed ? 'none' : 'inline');
+            revealedEls.forEach(el => el.style.display = allRevealed ? 'inline' : 'none');
+            btns.forEach(btn => btn.textContent = allRevealed ? 'hide' : 'show');
+            document.getElementById('toggleAllBtn').textContent = allRevealed ? '🔒 Hide All Codes' : '👁 Reveal All Codes';
+        }
+    </script>
+</body>
+</html>

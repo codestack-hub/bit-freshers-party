@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BIT Freshers Party 2026 🎉 × District App — Register Now</title>
+    <meta name="description" content="Register for the B.E. Freshers Party 2026 at Bangalore Institute of Technology — in collaboration with District App. Entry ₹999 via gift card at Just Bangalore, Brigade Road.">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --bg-primary: #0a0a14;
+            --bg-card: rgba(255, 255, 255, 0.04);
+            --border: rgba(255, 255, 255, 0.08);
+            --text-primary: #f0f0f5;
+            --text-secondary: #9ca3af;
+            --accent-purple: #a78bfa;
+            --accent-pink: #f472b6;
+            --accent-orange: #fb923c;
+            --accent-green: #34d399;
+            --danger: #f87171;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem 1rem;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before, body::after {
+            content: '';
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(120px);
+            opacity: 0.3;
+            z-index: -1;
+            animation: float 8s ease-in-out infinite;
+        }
+        body::before {
+            width: 500px; height: 500px;
+            background: radial-gradient(circle, #a78bfa, transparent 70%);
+            top: -150px; left: -100px;
+        }
+        body::after {
+            width: 400px; height: 400px;
+            background: radial-gradient(circle, #f472b6, transparent 70%);
+            bottom: -100px; right: -80px;
+            animation-delay: -4s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(30px, -20px) scale(1.05); }
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes shimmer {
+            0% { background-position: -200% center; }
+            100% { background-position: 200% center; }
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
+        }
+
+        .card {
+            width: 100%;
+            max-width: 520px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 2.5rem 2rem;
+            backdrop-filter: blur(20px);
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        .hero {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+        .hero .emoji-row {
+            font-size: 2.5rem;
+            margin-bottom: 0.75rem;
+            letter-spacing: 0.3rem;
+        }
+        .hero h1 {
+            font-size: 1.85rem;
+            font-weight: 900;
+            line-height: 1.2;
+            background: linear-gradient(135deg, var(--accent-purple), var(--accent-pink), var(--accent-orange));
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: shimmer 4s linear infinite;
+            margin-bottom: 0.5rem;
+        }
+        .hero .subtitle {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+        .hero .college {
+            font-size: 0.8rem;
+            color: var(--accent-purple);
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-top: 0.5rem;
+        }
+        .hero .collab {
+            font-size: 0.8rem;
+            color: var(--accent-pink);
+            font-weight: 600;
+            margin-top: 0.35rem;
+            letter-spacing: 0.5px;
+        }
+        .hero .collab strong { color: var(--accent-orange); }
+        .hero .organised-by {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            margin-top: 0.5rem;
+            opacity: 0.7;
+        }
+
+        /* Venue + Price strip */
+        .venue-strip {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1.25rem;
+            background: linear-gradient(135deg, rgba(167,139,250,0.08), rgba(251,146,60,0.08));
+            border: 1px solid rgba(251,146,60,0.15);
+            border-radius: 14px;
+            padding: 0.9rem 1.25rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+        .venue-item {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            white-space: nowrap;
+        }
+        .venue-item strong { color: var(--text-primary); }
+        .venue-divider {
+            width: 1px;
+            height: 20px;
+            background: rgba(255,255,255,0.15);
+        }
+
+        /* Seat counter */
+        .seat-counter {
+            text-align: center;
+            margin-bottom: 1.25rem;
+        }
+        .seat-counter .count {
+            font-size: 1.6rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--accent-green), #6ee7b7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .seat-counter .count.low {
+            background: linear-gradient(135deg, var(--accent-orange), var(--danger));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+        .seat-counter .count.zero {
+            background: linear-gradient(135deg, var(--danger), #ef4444);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .seat-counter .label {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            margin-top: 0.15rem;
+        }
+        /* Progress bar */
+        .seat-bar {
+            width: 100%;
+            height: 6px;
+            background: rgba(255,255,255,0.06);
+            border-radius: 3px;
+            margin-top: 0.6rem;
+            overflow: hidden;
+        }
+        .seat-bar-fill {
+            height: 100%;
+            border-radius: 3px;
+            background: linear-gradient(90deg, var(--accent-green), var(--accent-purple));
+            transition: width 0.6s ease;
+        }
+
+        .info-banner {
+            background: linear-gradient(135deg, rgba(167,139,250,0.1), rgba(244,114,182,0.1));
+            border: 1px solid rgba(167,139,250,0.2);
+            border-radius: 14px;
+            padding: 1rem 1.25rem;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+        .info-banner p {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+        .info-banner strong { color: var(--accent-orange); }
+
+        /* Form */
+        .form-group { margin-bottom: 1.25rem; }
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+        .form-group label {
+            display: block;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.75px;
+            margin-bottom: 0.5rem;
+        }
+        .form-group label .required {
+            color: var(--danger);
+            margin-left: 2px;
+        }
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 0.85rem 1rem;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+            font-size: 0.95rem;
+            transition: all 0.25s ease;
+            outline: none;
+            -webkit-appearance: none;
+            appearance: none;
+        }
+        .form-group select {
+            cursor: pointer;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%239ca3af' viewBox='0 0 16 16'%3E%3Cpath d='M1.5 5.5l6.5 6.5 6.5-6.5'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            padding-right: 2.5rem;
+        }
+        .form-group select option {
+            background: #1a1a2e;
+            color: var(--text-primary);
+        }
+        .form-group input::placeholder {
+            color: rgba(255,255,255,0.2);
+        }
+        .form-group input:focus,
+        .form-group select:focus {
+            border-color: var(--accent-purple);
+            box-shadow: 0 0 0 3px rgba(167,139,250,0.15);
+            background: rgba(255,255,255,0.07);
+        }
+        .form-group .hint {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            margin-top: 0.4rem;
+            opacity: 0.7;
+        }
+
+        .gift-card-group input {
+            border-color: rgba(251,146,60,0.3);
+            background: rgba(251,146,60,0.05);
+            font-family: 'Courier New', monospace;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+        .gift-card-group input:focus {
+            border-color: var(--accent-orange);
+            box-shadow: 0 0 0 3px rgba(251,146,60,0.15);
+        }
+        .gift-card-group label {
+            color: var(--accent-orange) !important;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 1rem;
+            margin-top: 0.5rem;
+            border: none;
+            border-radius: 14px;
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            font-weight: 700;
+            color: #fff;
+            cursor: pointer;
+            background: linear-gradient(135deg, var(--accent-purple), var(--accent-pink), var(--accent-orange));
+            background-size: 200% auto;
+            transition: all 0.3s ease;
+            letter-spacing: 0.5px;
+        }
+        .submit-btn:hover {
+            background-position: right center;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(167,139,250,0.3);
+        }
+        .submit-btn:active { transform: translateY(0); }
+        .submit-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            transform: none !important;
+            box-shadow: none !important;
+        }
+
+        /* Flash messages */
+        .flash {
+            padding: 1rem 1.25rem;
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+            font-size: 0.9rem;
+            font-weight: 500;
+            text-align: center;
+            animation: fadeInUp 0.4s ease-out;
+            line-height: 1.6;
+        }
+        .flash.success {
+            background: rgba(52,211,153,0.1);
+            border: 1px solid rgba(52,211,153,0.25);
+            color: var(--accent-green);
+        }
+        .flash.success .entry-code-display {
+            display: inline-block;
+            margin-top: 0.5rem;
+            padding: 0.5rem 1.25rem;
+            background: rgba(52,211,153,0.15);
+            border: 1px dashed rgba(52,211,153,0.4);
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 1.2rem;
+            font-weight: 800;
+            letter-spacing: 2px;
+            color: #6ee7b7;
+        }
+        .flash.error {
+            background: rgba(248,113,113,0.1);
+            border: 1px solid rgba(248,113,113,0.25);
+            color: var(--danger);
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 2rem;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            opacity: 0.5;
+        }
+
+        @media (max-width: 560px) {
+            .card { padding: 2rem 1.5rem; border-radius: 20px; }
+            .hero h1 { font-size: 1.5rem; }
+            .hero .emoji-row { font-size: 2rem; }
+            .venue-strip { flex-direction: column; gap: 0.5rem; }
+            .venue-divider { display: none; }
+            .form-row { grid-template-columns: 1fr; gap: 0; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <div class="hero">
+            <div class="emoji-row">🎉🎊🥳</div>
+            <h1>Freshers Party 2026</h1>
+            <p class="subtitle">You're Invited! Register Below to Join the Celebration</p>
+            <p class="college">Bangalore Institute of Technology</p>
+            <p class="collab">In Collaboration with <strong>District App</strong></p>
+            <p class="organised-by">Organised with ❤️ by 3rd Year Students</p>
+        </div>
+
+        <div class="venue-strip">
+            <div class="venue-item">📍 <strong>Just Bangalore</strong>, Brigade Road</div>
+            <div class="venue-divider"></div>
+            <div class="venue-item">🎟️ Entry: <strong>₹999</strong> via District Gift Card</div>
+        </div>
+
+        <!-- Live seat counter -->
+        <div class="seat-counter">
+            {% if seats_left > 0 %}
+                <div class="count {% if seats_left <= 30 %}low{% endif %}">{{ seats_left }}</div>
+                <div class="label">seats remaining out of 200</div>
+            {% else %}
+                <div class="count zero">HOUSEFULL 🚫</div>
+                <div class="label">All 200 seats have been booked!</div>
+            {% endif %}
+            <div class="seat-bar">
+                <div class="seat-bar-fill" style="width: {{ (seats_taken / 200 * 100) | int }}%"></div>
+            </div>
+        </div>
+
+        <div class="info-banner">
+            <p>
+                📱 We've partnered with the <strong>District App</strong> to bring you an unforgettable night!<br>
+                Purchase a <strong>₹999 gift card</strong> on the District app and paste the code below.<br>
+                🎫 You'll receive a <strong>unique entry code</strong> — screenshot it and show it at the door!
+            </p>
+        </div>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="flash {{ category }}">
+                        {% if category == 'success' and 'BIT-' in message %}
+                            {% set parts = message.split('Your entry code is: ') %}
+                            {{ parts[0] }}<br>
+                            Your entry code is:
+                            {% set code_and_rest = parts[1].split(' — ') %}
+                            <div class="entry-code-display">{{ code_and_rest[0] }}</div>
+                            <br>📸 {{ code_and_rest[1] }}
+                        {% else %}
+                            {{ message }}
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        {% if seats_left > 0 %}
+        <form method="POST" action="/register" autocomplete="off">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <div class="form-group">
+                <label>Full Name <span class="required">*</span></label>
+                <input type="text" name="full_name" placeholder="e.g. Rahul Sharma" required>
+            </div>
+
+            <div class="form-group">
+                <label>USN / Roll Number <span class="required">*</span></label>
+                <input type="text" name="usn" placeholder="e.g. 1BI26CS001" required>
+            </div>
+
+            <div class="form-group">
+                <label>Phone Number <span class="required">*</span></label>
+                <input type="tel" name="phone" placeholder="e.g. 9876543210" pattern="[0-9]{10}" maxlength="10" required>
+                <p class="hint">10-digit mobile number (no country code)</p>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Branch <span class="required">*</span></label>
+                    <select name="branch" required>
+                        <option value="" disabled selected>Select Branch</option>
+                        <option value="CSE">CSE</option>
+                        <option value="ISE">ISE</option>
+                        <option value="AIML">AIML</option>
+                        <option value="AIDS">AIDS</option>
+                        <option value="ECE">ECE</option>
+                        <option value="EEE">EEE</option>
+                        <option value="ME">ME</option>
+                        <option value="CV">CV</option>
+                        <option value="BT">BT</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Year <span class="required">*</span></label>
+                    <select name="year" required>
+                        <option value="" disabled selected>Select Year</option>
+                        <option value="1st Year">1st Year</option>
+                        <option value="2nd Year">2nd Year</option>
+                    </select>
+                    <p class="hint">Only 1st & 2nd year</p>
+                </div>
+            </div>
+
+            <div class="form-group gift-card-group">
+                <label>🎫 District App Gift Card Code <span class="required">*</span></label>
+                <input type="text" name="gift_card_code" placeholder="e.g. DIST-XXXX-XXXX-XXXX" autocomplete="off" required>
+                <p class="hint">🔒 Your code is encrypted & only visible to the organising team</p>
+            </div>
+
+            <button type="submit" class="submit-btn">🎉 Register & Get My Entry Code</button>
+        </form>
+        {% else %}
+        <div style="text-align:center; padding: 2rem 0; color: var(--text-secondary);">
+            <div style="font-size: 3rem; margin-bottom: 1rem;">😔</div>
+            <p style="font-size: 1rem; font-weight: 600; color: var(--danger);">Registrations are closed!</p>
+            <p style="font-size: 0.85rem; margin-top: 0.5rem;">All 200 seats have been booked. Better luck next time!</p>
+        </div>
+        {% endif %}
+    </div>
+
+    <p class="footer">🔒 Your data is encrypted & secured · Made with 💜 by the BIT 3rd Year Organizing Team × District App</p>
+
+</body>
+</html>
