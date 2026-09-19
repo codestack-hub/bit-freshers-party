@@ -61,7 +61,7 @@ _enc_key = os.environ.get("ENCRYPTION_KEY")
 if not _enc_key:
     # Auto-generate for local dev (data won't survive key change)
     _enc_key = Fernet.generate_key().decode()
-    print("⚠  No ENCRYPTION_KEY set — using ephemeral key (fine for local dev)")
+    print("[WARNING] No ENCRYPTION_KEY set -- using ephemeral key (fine for local dev)")
 
 fernet = Fernet(_enc_key.encode() if isinstance(_enc_key, str) else _enc_key)
 
