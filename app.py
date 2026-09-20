@@ -211,7 +211,8 @@ def register():
     flash(
         f"🎉 You're registered, {full_name.split()[0]}! "
         f"Your entry code is: {entry_code} — "
-        f"Screenshot this! You'll need it at the door.",
+        f"Screenshot this! You'll need it at the door. — "
+        f"Our team will verify your details and add you to the official WhatsApp group soon!",
         "success",
     )
     return redirect(url_for("index"))
