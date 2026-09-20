@@ -161,19 +161,43 @@ def register():
     year = request.form.get("year", "").strip()
     gift_card_code = request.form.get("gift_card_code", "").strip()
 
-    # Basic validation
+    # --- Comprehensive Validation ---
+    import re
+
+    VALID_BRANCHES = {"CSE", "ISE", "AIML", "AIDS", "ECE", "EEE", "ME", "CV", "BT", "Other"}
+
     if not all([full_name, usn, phone, branch, year, gift_card_code]):
         flash("Please fill in all required fields.", "error")
         return redirect(url_for("index"))
 
-    # Validate year
-    if year not in ("1st Year", "2nd Year"):
-        flash("Only 1st and 2nd year students can register.", "error")
+    # Name: at least 2 characters, letters and spaces only
+    if len(full_name) < 2 or not re.match(r"^[A-Za-z\s.'-]+$", full_name):
+        flash("Please enter a valid full name (letters only, no numbers or special characters).", "error")
         return redirect(url_for("index"))
 
-    # Validate phone
-    if not phone.isdigit() or len(phone) != 10:
-        flash("Please enter a valid 10-digit phone number.", "error")
+    # USN: BIT format like 1BI26CS001 (digit + BI + 2 digits + 2-4 letter branch + 3 digits)
+    if not re.match(r"^\d{1}BI\d{2}[A-Z]{2,4}\d{3}$", usn):
+        flash("Invalid USN format. Expected format: 1BI26CS001 (check your college ID card).", "error")
+        return redirect(url_for("index"))
+
+    # Year: only 1st and 2nd year
+    if year not in ("1st Year", "2nd Year"):
+        flash("Only 1st and 2nd year students can register for the Freshers Party.", "error")
+        return redirect(url_for("index"))
+
+    # Branch: must be from allowed list
+    if branch not in VALID_BRANCHES:
+        flash("Please select a valid branch from the dropdown.", "error")
+        return redirect(url_for("index"))
+
+    # Phone: exactly 10 digits, must start with 6-9 (Indian mobile)
+    if not re.match(r"^[6-9]\d{9}$", phone):
+        flash("Please enter a valid 10-digit Indian mobile number (starting with 6, 7, 8, or 9).", "error")
+        return redirect(url_for("index"))
+
+    # Gift card code: minimum 8 characters
+    if len(gift_card_code) < 8:
+        flash("Invalid gift card code. District app codes are at least 8 characters long.", "error")
         return redirect(url_for("index"))
 
     # Check seat limit

@@ -378,6 +378,67 @@
             .venue-divider { display: none; }
             .form-row { grid-template-columns: 1fr; gap: 0; }
         }
+
+        .field-error {
+            font-size: 0.75rem;
+            color: var(--danger);
+            margin-top: 0.35rem;
+            min-height: 0;
+            transition: all 0.2s;
+        }
+        .field-error:not(:empty) {
+            min-height: 1rem;
+        }
+        .form-group input.valid,
+        .form-group input:focus.valid {
+            border-color: var(--accent-green) !important;
+            box-shadow: 0 0 0 3px rgba(52,211,153,0.12) !important;
+        }
+        .form-group input.invalid,
+        .form-group input:focus.invalid {
+            border-color: var(--danger) !important;
+            box-shadow: 0 0 0 3px rgba(248,113,113,0.12) !important;
+        }
+
+        .how-it-works {
+            margin-top: 2rem;
+            padding: 1.25rem;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+        }
+        .how-title {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.85rem;
+            text-align: center;
+        }
+        .step {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            padding: 0.45rem 0;
+        }
+        .step strong { color: var(--text-primary); }
+        .step-num {
+            width: 22px; height: 22px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent-purple), var(--accent-pink));
+            color: #fff;
+            font-size: 0.65rem;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
     </style>
 </head>
 <body>
@@ -446,28 +507,33 @@
         {% endwith %}
 
         {% if seats_left > 0 %}
-        <form method="POST" action="/register" autocomplete="off">
+        <form method="POST" action="/register" autocomplete="off" id="regForm" onsubmit="return validateAndSubmit()">
             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
             <div class="form-group">
                 <label>Full Name <span class="required">*</span></label>
-                <input type="text" name="full_name" placeholder="e.g. Rahul Sharma" required>
+                <input type="text" name="full_name" id="full_name" placeholder="e.g. Rahul Sharma" required>
+                <p class="field-error" id="err-name"></p>
             </div>
 
             <div class="form-group">
                 <label>USN / Roll Number <span class="required">*</span></label>
-                <input type="text" name="usn" placeholder="e.g. 1BI26CS001" required>
+                <input type="text" name="usn" id="usn" placeholder="e.g. 1BI26CS001" style="text-transform: uppercase;" required>
+                <p class="hint">BIT USN format: 1BI + year + branch + roll (e.g. 1BI26CS001)</p>
+                <p class="field-error" id="err-usn"></p>
             </div>
 
             <div class="form-group">
                 <label>Phone Number <span class="required">*</span></label>
-                <input type="tel" name="phone" placeholder="e.g. 9876543210" pattern="[0-9]{10}" maxlength="10" required>
-                <p class="hint">10-digit mobile number (no country code)</p>
+                <input type="tel" name="phone" id="phone" placeholder="e.g. 9876543210" maxlength="10" required>
+                <p class="hint">10-digit Indian mobile number</p>
+                <p class="field-error" id="err-phone"></p>
             </div>
 
             <div class="form-row">
                 <div class="form-group">
                     <label>Branch <span class="required">*</span></label>
-                    <select name="branch" required>
+                    <select name="branch" id="branch" required>
                         <option value="" disabled selected>Select Branch</option>
                         <option value="CSE">CSE</option>
                         <option value="ISE">ISE</option>
@@ -484,7 +550,7 @@
 
                 <div class="form-group">
                     <label>Year <span class="required">*</span></label>
-                    <select name="year" required>
+                    <select name="year" id="year" required>
                         <option value="" disabled selected>Select Year</option>
                         <option value="1st Year">1st Year</option>
                         <option value="2nd Year">2nd Year</option>
@@ -495,12 +561,27 @@
 
             <div class="form-group gift-card-group">
                 <label>🎫 District App Gift Card Code <span class="required">*</span></label>
-                <input type="text" name="gift_card_code" placeholder="e.g. DIST-XXXX-XXXX-XXXX" autocomplete="off" required>
+                <input type="text" name="gift_card_code" id="gift_card_code" placeholder="e.g. DIST-XXXX-XXXX-XXXX" autocomplete="off" minlength="8" required>
                 <p class="hint">🔒 Your code is encrypted & only visible to the organising team</p>
+                <p class="field-error" id="err-code"></p>
             </div>
 
-            <button type="submit" class="submit-btn">🎉 Register & Get My Entry Code</button>
+            <button type="submit" class="submit-btn" id="submitBtn">
+                <span id="btnText">🎉 Register & Get My Entry Code</span>
+                <span id="btnLoader" style="display:none;">⏳ Registering...</span>
+            </button>
         </form>
+
+        <!-- How it works -->
+        <div class="how-it-works">
+            <p class="how-title">📋 How It Works</p>
+            <div class="step"><span class="step-num">1</span> Purchase a ₹999 gift card on the <strong>District App</strong></div>
+            <div class="step"><span class="step-num">2</span> Fill in your details & paste the gift card code above</div>
+            <div class="step"><span class="step-num">3</span> Get your <strong>unique entry code</strong> — screenshot it!</div>
+            <div class="step"><span class="step-num">4</span> Our team verifies & adds you to the <strong>WhatsApp group</strong></div>
+            <div class="step"><span class="step-num">5</span> Show your entry code at the door on party night 🎉</div>
+        </div>
+
         {% else %}
         <div style="text-align:center; padding: 2rem 0; color: var(--text-secondary);">
             <div style="font-size: 3rem; margin-bottom: 1rem;">😔</div>
@@ -511,6 +592,68 @@
     </div>
 
     <p class="footer">🔒 Your data is encrypted & secured · Made with 💜 by the BIT 3rd Year Organizing Team × District App</p>
+
+    <script>
+        const fields = {
+            full_name: { err: 'err-name', validate: v => /^[A-Za-z\s.'-]{2,}$/.test(v) ? '' : 'Enter a valid name (letters only, no numbers)' },
+            usn: { err: 'err-usn', validate: v => /^\d{1}BI\d{2}[A-Z]{2,4}\d{3}$/.test(v.toUpperCase()) ? '' : 'Invalid USN — expected format: 1BI26CS001' },
+            phone: { err: 'err-phone', validate: v => /^[6-9]\d{9}$/.test(v) ? '' : 'Must be 10 digits starting with 6, 7, 8, or 9' },
+            gift_card_code: { err: 'err-code', validate: v => v.length >= 8 ? '' : 'Code must be at least 8 characters long' },
+        };
+
+        Object.keys(fields).forEach(key => {
+            const input = document.getElementById(key);
+            if (!input) return;
+
+            input.addEventListener('blur', () => {
+                const val = input.value.trim();
+                if (!val) { clearState(input, key); return; }
+                const msg = fields[key].validate(val);
+                showState(input, key, msg);
+            });
+
+            input.addEventListener('input', () => {
+                const errEl = document.getElementById(fields[key].err);
+                if (errEl.textContent) {
+                    const msg = fields[key].validate(input.value.trim());
+                    showState(input, key, msg);
+                }
+            });
+        });
+
+        function showState(input, key, msg) {
+            const errEl = document.getElementById(fields[key].err);
+            errEl.textContent = msg;
+            input.classList.remove('valid', 'invalid');
+            input.classList.add(msg ? 'invalid' : 'valid');
+        }
+
+        function clearState(input, key) {
+            document.getElementById(fields[key].err).textContent = '';
+            input.classList.remove('valid', 'invalid');
+        }
+
+        function validateAndSubmit() {
+            let valid = true;
+            Object.keys(fields).forEach(key => {
+                const input = document.getElementById(key);
+                if (!input) return;
+                const msg = fields[key].validate(input.value.trim());
+                showState(input, key, msg);
+                if (msg) valid = false;
+            });
+
+            if (!document.getElementById('branch').value) valid = false;
+            if (!document.getElementById('year').value) valid = false;
+
+            if (valid) {
+                document.getElementById('btnText').style.display = 'none';
+                document.getElementById('btnLoader').style.display = 'inline';
+                document.getElementById('submitBtn').disabled = true;
+            }
+            return valid;
+        }
+    </script>
 
 </body>
 </html>
