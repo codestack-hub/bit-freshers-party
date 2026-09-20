@@ -1,0 +1,26 @@
+databases:
+  - name: bit-freshers-db
+    plan: free
+    databaseName: bit_freshers
+    user: bit_admin
+
+services:
+  - type: web
+    name: bit-freshers-party
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: bit-freshers-db
+          property: connectionString
+      - key: SECRET_KEY
+        generateValue: true
+      - key: ENCRYPTION_KEY
+        value: 77Oxvyo_PGuihA8Hiw3Usueo3tNTgKcujAqCfQrbVpU=
+      - key: ADMIN_USERNAME
+        value: admin
+      - key: ADMIN_PASSWORD
+        sync: false
